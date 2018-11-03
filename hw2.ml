@@ -17,15 +17,12 @@ let rec merge_any_lists l1 l2 cmp =
         then a1::(merge_any_lists t1 l2 cmp) 
         else  a2::(merge_any_lists l1 t2 cmp);;
   
-
 let merge_string_lists l1 l2 = merge_any_lists l1 l2 compare;;
 
 
 type name = {fname: string; sname: string}
 
 let merge_name_lists l1 l2 = merge_any_lists l1 l2 compare;;
-
-
 let name_lists l1 l2 = 
   merge_any_lists l1 l2 (fun a1 a2 -> 
     let fn = compare a1.fname a2.fname in 
@@ -40,12 +37,10 @@ let forall predicate lst =
 let exists predicate lst=
   List.fold_left (fun acc x -> acc || predicate x) false lst;;
 
-
 type typ =
   | TypI (* int *)
   | TypB (* bool *)
   | TypF of typ * typ (* function: T1 -> T2 *);;
-
 
 type op = Add | Mult | Eq | Less;;
 
@@ -62,11 +57,11 @@ type expr =
 exception UndefinedVariable of string;;
 exception TypeError;;
 
-let rec lookup v en =
-  match en with 
-    [] -> None
-    | (name, tp)::t -> if name = v then Some tp else lookup v t;;
 let rec typecheck e =
+  let rec lookup v en =
+    match en with 
+      [] -> None
+      | (name, tp)::t -> if name = v then Some tp else lookup v t in
   let rec typecheck_env e env =
     match e with
     | ConstI _ -> TypI
